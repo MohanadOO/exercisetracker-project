@@ -23,5 +23,8 @@
   "keywords": [
     "node",
     "express"
-  ]
+  ],
+  "devDependencies": {
+    "@vercel/node": "^1.15.3"
+  }
 }
