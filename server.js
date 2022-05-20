@@ -67,8 +67,11 @@ app.post('/api/users', (req, res) => {
 
 app.post('/api/users/:_id/exercises', (req, res) => {
   const _id = req.body.id
+
   const date =
-    new Date(req.body.date).toDateString() || new Date().toDateString()
+    req.body.date !== ''
+      ? new Date(req.body.date).toDateString()
+      : new Date().toDateString()
   run()
   async function run() {
     try {
@@ -84,11 +87,11 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       await user[0].save()
       const logLength = user[0].log.length - 1
       res.json({
-        _id: user[0]._id,
         username: user[0].username,
-        date: user[0].log[logLength].date.toDateString(),
-        duration: user[0].log[logLength].duration,
         description: user[0].log[logLength].description,
+        duration: user[0].log[logLength].duration,
+        date: user[0].log[logLength].date.toDateString(),
+        _id: user[0]._id,
       })
     } catch (e) {
       console.log(e.message)
@@ -112,12 +115,21 @@ app.get('/api/users/:_id/logs', (req, res) => {
       .map((i) => {
         return i
       })
+    const fixLog = []
+    fix.forEach((i) => {
+      const logObject = {
+        description: i.description,
+        duration: i.duration,
+        date: i.date.toDateString(),
+      }
+      return fixLog.push(logObject)
+    })
     const count = [...fix].splice(0, limit).length
     res.json({
-      _id: user[0]._id,
       username: user[0].username,
       count: count,
-      log: fix.splice(0, limit),
+      _id: user[0]._id,
+      log: fixLog.splice(0, limit),
     })
   }
 })
