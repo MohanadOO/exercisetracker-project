@@ -130,3 +130,5 @@ app.get('/api/users', (req, res) => {
 })
 
 app.listen(process.env.PORT || 5500)
+
+module.exports = app
