@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const path = require('path')
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
@@ -25,11 +26,11 @@ const userSchema = new Schema({
 let User = mongoose.model('User', userSchema)
 
 app.use(cors())
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => {
-  res.render('index')
+  res.render(path.join(__dirname + '/views/index.ejs'))
 })
 
 app.post('/api/users', (req, res) => {
@@ -129,6 +130,6 @@ app.get('/api/users', (req, res) => {
   findLength()
 })
 
-app.listen(process.env.PORT || 5500)
+app.listen(5500)
 
 module.exports = app
